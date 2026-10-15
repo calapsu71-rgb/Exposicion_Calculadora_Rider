@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado Acumulado</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 360px;
+      text-align: center;
+    }
+    h2 { color: #2c3e50; }
+    .result-box {
+      background-color: #e6ffec;
+      border: 2px solid #2da44e;
+      color: #1a7f37;
+      font-size: 36px;
+      font-weight: bold;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .btn {
+      background-color: #6e7781;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+    }
+    .btn:hover { background-color: #57606a; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Resultado Acumulado</h2>
+    <p>Valor total guardado en <code>resultado.txt</code>:</p>
+    
+    <div id="resultado" class="result-box">Cargando...</div>
+
+    <a href="index.html" class="btn">⬅ Volver a Ingreso</a>
+  </div>
+
+  <script>
+    // Carga el contenido de resultado.txt dinámicamente
+    fetch('resultado.txt?t=' + new Date().getTime())
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('resultado').innerText = data.trim();
+      })
+      .catch(error => {
+        document.getElementById('resultado').innerText = 'Error al cargar';
+      });
+  </script>
+
+</body>
+</html>

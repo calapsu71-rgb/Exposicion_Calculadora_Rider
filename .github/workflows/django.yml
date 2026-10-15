@@ -1,0 +1,58 @@
+name: Django Continuous Integration & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+# Esto le da los permisos al robot para escribir en GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # 1. Bolita de Verificación y Compilación (Build)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Django
+        run: |
+          python -m pip install --upgrade pip
+          pip install django
+        working-directory: proyecto_suma
+
+      - name: Ejecutar pruebas de Django
+        run: |
+          python manage.py test
+        working-directory: proyecto_suma
+
+      - name: Subir artefacto para GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Le decimos al robot que suba toda la carpeta de la app
+          path: '.'
+
+  # 2. Bolita de Despliegue con el enlace (Deploy)
+  deploy:
+    # Este paso necesita que el 'build' termine exitosamente
+    needs: build
+    runs-on: ubuntu-latest
+    
+    # Este environment genera el link clickeable en la bolita verde
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

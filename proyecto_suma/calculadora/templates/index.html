@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Django - Ingreso</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 35px 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    h2 {
+      color: #2d3748;
+      margin-bottom: 24px;
+      font-size: 24px;
+    }
+    .input-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 14px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    .btn {
+      background-color: #667eea;
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 10px;
+      transition: background-color 0.2s;
+    }
+    .btn:hover {
+      background-color: #5a67d8;
+    }
+    .btn-secondary {
+      background-color: transparent;
+      color: #667eea;
+      border: 2px solid #667eea;
+      margin-top: 12px;
+      text-decoration: none;
+      display: inline-block;
+      box-sizing: border-box;
+    }
+    .btn-secondary:hover {
+      background-color: #f7fafc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Calculadora Django</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="input-group">
+        <label for="num1">Primer Número:</label>
+        <input type="number" id="num1" name="num1" placeholder="Ej: 25" required>
+      </div>
+
+      <div class="input-group">
+        <label for="num2">Segundo Número:</label>
+        <input type="number" id="num2" name="num2" placeholder="Ej: 75" required>
+      </div>
+
+      <button type="submit" class="btn">Calcular y Guardar Suma</button>
+    </form>
+
+    <a href="{% url 'resultado' %}" class="btn btn-secondary">Ver Resultado Acumulado ➔</a>
+  </div>
+
+</body>
+</html>

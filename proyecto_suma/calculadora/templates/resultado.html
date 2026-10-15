@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Django - Resultado</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 35px 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    h2 {
+      color: #2d3748;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    p {
+      color: #718096;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .result-box {
+      background-color: #f0fff4;
+      border: 2px solid #38ef7d;
+      color: #276749;
+      font-size: 42px;
+      font-weight: bold;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+    .btn {
+      background-color: #4a5568;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 600;
+      width: 100%;
+      box-sizing: border-box;
+      transition: background-color 0.2s;
+    }
+    .btn:hover {
+      background-color: #2d3748;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Total Acumulado</h2>
+    <p>Valor procesado desde el servidor Django:</p>
+    
+    <div class="result-box">{{ total }}</div>
+
+    <a href="{% url 'index' %}" class="btn">⬅ Realizar otra suma</a>
+  </div>
+
+</body>
+</html>
