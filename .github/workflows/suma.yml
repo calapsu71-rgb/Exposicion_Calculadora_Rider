@@ -1,0 +1,45 @@
+name: Ejecutar Suma Personalizada
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  workflow_dispatch:
+    inputs:
+      numeros:
+        description: 'Ingresa los números a sumar separados por espacio (ej: 20 30)'
+        required: true
+        default: '10 15'
+
+permissions:
+  contents: write
+
+jobs:
+  ejecutar-suma:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Ejecutar script con números personalizados
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python sumar.py ${{ github.event.inputs.numeros }}
+          else
+            # Números por defecto cuando se activa por un push
+            python sumar.py 10 20
+          fi
+
+      - name: Hacer Commit y Push del resultado
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "auto: actualizar resultado de la suma"
+          file_pattern: "resultado.txt"

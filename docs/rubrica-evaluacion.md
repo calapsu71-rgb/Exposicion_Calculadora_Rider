@@ -1,0 +1,8 @@
+# Rúbrica de Evaluación - Fase de Análisis y Entorno (LastBite)
+
+| Criterio a Evaluar | Excelente (100-90) | Bueno (89-75) | Requiere Mejora (74-60) | Inaceptable (<60) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Uso de Git y GitHub** | Ramas bien estructuradas, commits descriptivos, uso de plantillas, y repositorio organizado (`docs/`, `src/`). | Repositorio creado con commits regulares pero mensajes poco descriptivos. | Faltan carpetas clave o los commits son masivos y sin orden. | No hay control de versiones. |
+| **Documentación Ágil** | Plantilla de HU, DoD y Guía de aprendizaje están completos, bien redactados y contextualizados al proyecto LastBite. | Faltan detalles técnicos en el DoD o en las Historias de Usuario. | Documentos incompletos o copiados sin adaptar al proyecto. | No se entregaron los documentos solicitados. |
+| **Arquitectura de Software** | El planteamiento de uso de Python/Flask y MongoDB está justificado de acuerdo a los requerimientos del marketplace. | Planteamiento tecnológico aceptable pero sin justificación clara para el proyecto. | Dudas significativas sobre cómo se integrarán el backend y la base de datos. | No se evidencia claridad tecnológica. |
+| **Impacto (Sostenibilidad)** | Queda explícitamente justificado cómo el sistema mitiga el desperdicio de alimentos (Alineación con ODS 12). | Se menciona la sostenibilidad pero no queda claro en las Historias de Usuario. | El foco ambiental es secundario o nulo. | El proyecto no soluciona el problema planteado. |
