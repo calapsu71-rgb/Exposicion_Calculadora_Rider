@@ -5,14 +5,13 @@ on:
     branches:
       - main
 
-# Esto le da los permisos al robot para escribir en GitHub Pages
+# Permisos necesarios para desplegar en GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
-  # 1. Bolita de Verificación y Compilación (Build)
   build:
     runs-on: ubuntu-latest
     steps:
@@ -35,19 +34,19 @@ jobs:
           python manage.py test
         working-directory: proyecto_suma
 
+      - name: Ejecutar script de suma (Actualiza resultado.txt)
+        run: |
+          python sumar.py
+
       - name: Subir artefacto para GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          # Le decimos al robot que suba toda la carpeta de la app
+          # Sube todo el proyecto ya con el resultado.txt actualizado en caliente
           path: '.'
 
-  # 2. Bolita de Despliegue con el enlace (Deploy)
   deploy:
-    # Este paso necesita que el 'build' termine exitosamente
     needs: build
     runs-on: ubuntu-latest
-    
-    # Este environment genera el link clickeable en la bolita verde
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
