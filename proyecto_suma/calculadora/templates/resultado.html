@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultado de la Suma</title>
+  <title>Calculadora Django - Resultado</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -49,23 +49,13 @@
 <body>
 
   <div class="card">
-    <h2>Resultado Obtenido</h2>
+    <h2>Total Acumulado</h2>
+    <p>Valor procesado desde el servidor Django:</p>
     
-    <div id="resultado" class="result-box">0</div>
+    <div class="result-box">{{ total }}</div>
 
-    <a href="index.html" class="btn">⬅ Realizar otra suma</a>
+    <a href="{% url 'index' %}" class="btn">⬅ Realizar otra suma</a>
   </div>
-
-  <script>
-    // Lee el resultado guardado y lo muestra
-    const valorCalculado = localStorage.getItem('resultadoSuma');
-
-    if (valorCalculado !== null) {
-      document.getElementById('resultado').innerText = valorCalculado;
-    } else {
-      document.getElementById('resultado').innerText = '0';
-    }
-  </script>
 
 </body>
 </html>

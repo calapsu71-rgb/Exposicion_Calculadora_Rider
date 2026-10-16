@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Interactiva</title>
+  <title>Calculadora Django - Ingreso</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -50,35 +50,23 @@
 <body>
 
   <div class="card">
-    <h2>Calculadora</h2>
-    
-    <div class="input-group">
-      <label for="num1">Número 1:</label>
-      <input type="number" id="num1" placeholder="Ej: 20">
-    </div>
+    <h2>Calculadora Django</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="input-group">
+        <label for="num1">Primer Número:</label>
+        <input type="number" id="num1" name="num1" placeholder="Ej: 25" required>
+      </div>
 
-    <div class="input-group">
-      <label for="num2">Número 2:</label>
-      <input type="number" id="num2" placeholder="Ej: 30">
-    </div>
+      <div class="input-group">
+        <label for="num2">Segundo Número:</label>
+        <input type="number" id="num2" name="num2" placeholder="Ej: 75" required>
+      </div>
 
-    <button type="button" id="btnSumar" class="btn">Calcular Suma</button>
+      <button type="submit" class="btn">Calcular y Guardar Suma</button>
+    </form>
+
   </div>
-
-  <script>
-    document.getElementById('btnSumar').addEventListener('click', function() {
-      const num1 = parseFloat(document.getElementById('num1').value) || 0;
-      const num2 = parseFloat(document.getElementById('num2').value) || 0;
-      
-      const suma = num1 + num2;
-
-      // Guarda el resultado en el navegador
-      localStorage.setItem('resultadoSuma', suma);
-
-      // Redirige a la página de resultados
-      window.location.href = 'resultado.html';
-    });
-  </script>
 
 </body>
 </html>
