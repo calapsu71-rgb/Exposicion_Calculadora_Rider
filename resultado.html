@@ -7,41 +7,20 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f7f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+      background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;
     }
     .card {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      width: 360px;
-      text-align: center;
+      background: white; padding: 30px; border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 360px; text-align: center;
     }
     h2 { color: #2c3e50; }
     .result-box {
-      background-color: #e6ffec;
-      border: 2px solid #2da44e;
-      color: #1a7f37;
-      font-size: 36px;
-      font-weight: bold;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
+      background-color: #e6ffec; border: 2px solid #2da44e; color: #1a7f37;
+      font-size: 36px; font-weight: bold; padding: 20px; border-radius: 8px; margin: 20px 0;
     }
     .btn {
-      background-color: #6e7781;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 14px;
+      background-color: #6e7781; color: white; border: none; padding: 10px 15px;
+      border-radius: 6px; text-decoration: none; display: inline-block; font-size: 14px;
     }
     .btn:hover { background-color: #57606a; }
   </style>
@@ -50,23 +29,12 @@
 
   <div class="card">
     <h2>Resultado Acumulado</h2>
-    <p>Valor total guardado:</p>
+    <p>Valor total guardado en <code>resultado.txt</code>:</p>
     
-    <div id="resultado" class="result-box">Cargando...</div>
+    <div class="result-box">{{ total }}</div>
 
-    <a href="index.html" class="btn">⬅ Volver a Ingreso</a>
+    <a href="{% url 'index' %}" class="btn">⬅ Volver a Ingreso</a>
   </div>
-
-  <script>
-    // Carga el resultado acumulado desde la memoria del navegador (compatible con GitHub Pages)
-    const valorGuardado = localStorage.getItem('resultadoAcumulado');
-
-    if (valorGuardado !== null && valorGuardado !== '') {
-      document.getElementById('resultado').innerText = valorGuardado;
-    } else {
-      document.getElementById('resultado').innerText = '0'; // Muestra 0 si aún no hay datos guardados
-    }
-  </script>
 
 </body>
 </html>

@@ -13,13 +13,27 @@ def index(request):
         try:
             num1 = int(num1_raw)
             num2 = int(num2_raw)
-            suma = num1 + num2
+            suma_actual = num1 + num2
         except ValueError:
-            suma = 0
+            suma_actual = 0
 
-        # Guardar la suma real en el archivo txt
+        # --- OPCIÓN A: Sobrescribir con el último cálculo (Lo que hace tu código actual) ---
+        total_a_guardar = suma_actual
+
+        # --- OPCIÓN B: Acumular con los cálculos anteriores (Descomenta esto si quieres que se sume al anterior) ---
+        # total_a_guardar = suma_actual
+        # if os.path.exists(TXT_FILE_PATH):
+        #     with open(TXT_FILE_PATH, 'r', encoding='utf-8') as f:
+        #         contenido = f.read().strip()
+        #         if contenido:
+        #             try:
+        #                 total_a_guardar = float(contenido) + suma_actual
+        #             except ValueError:
+        #                 pass
+
+        # Guardar el resultado en el archivo txt
         with open(TXT_FILE_PATH, 'w', encoding='utf-8') as f:
-            f.write(str(suma))
+            f.write(str(total_a_guardar))
 
         return redirect('resultado')
 
