@@ -3,75 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Django - Resultado</title>
+  <title>Resultado de la Suma</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      background-color: #f4f7f6;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      height: 100vh;
       margin: 0;
     }
     .card {
       background: white;
-      padding: 35px 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 380px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 320px;
       text-align: center;
     }
-    h2 {
-      color: #2d3748;
-      margin-bottom: 10px;
-      font-size: 22px;
-    }
-    p {
-      color: #718096;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
+    h2 { color: #2c3e50; }
     .result-box {
-      background-color: #f0fff4;
-      border: 2px solid #38ef7d;
-      color: #276749;
-      font-size: 42px;
+      background-color: #e6ffec;
+      border: 2px solid #2da44e;
+      color: #1a7f37;
+      font-size: 36px;
       font-weight: bold;
       padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
+      border-radius: 8px;
+      margin: 20px 0;
     }
     .btn {
-      background-color: #4a5568;
+      background-color: #6e7781;
       color: white;
       border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
+      padding: 10px 15px;
+      border-radius: 6px;
       text-decoration: none;
       display: inline-block;
-      font-size: 15px;
-      font-weight: 600;
-      width: 100%;
-      box-sizing: border-box;
-      transition: background-color 0.2s;
+      font-size: 14px;
     }
-    .btn:hover {
-      background-color: #2d3748;
-    }
+    .btn:hover { background-color: #57606a; }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <h2>Total Acumulado</h2>
-    <p>Valor procesado desde el servidor Django:</p>
+    <h2>Resultado Obtenido</h2>
     
-    <div class="result-box">{{ total }}</div>
+    <div id="resultado" class="result-box">0</div>
 
-    <a href="{% url 'index' %}" class="btn">⬅ Realizar otra suma</a>
+    <a href="index.html" class="btn">⬅ Realizar otra suma</a>
   </div>
+
+  <script>
+    // Lee el resultado guardado y lo muestra
+    const valorCalculado = localStorage.getItem('resultadoSuma');
+
+    if (valorCalculado !== null) {
+      document.getElementById('resultado').innerText = valorCalculado;
+    } else {
+      document.getElementById('resultado').innerText = '0';
+    }
+  </script>
 
 </body>
 </html>
