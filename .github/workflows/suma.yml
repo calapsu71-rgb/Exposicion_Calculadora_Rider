@@ -8,7 +8,7 @@ on:
     branches:
       - main
 
-# Permiso obligatorio para que el robot pueda modificar y guardar archivos en el repositorio
+# Permiso obligatorio para que el robot pueda modificar y guardar archivos
 permissions:
   contents: write
 
@@ -25,15 +25,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Ejecutar script de suma
+      - name: Ejecutar script de suma en la raíz
         run: |
           python sumar.py
-        working-directory: src
 
       - name: Guardar y subir el nuevo resultado.txt al repositorio
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/resultado.txt
+          git add resultado.txt
           git diff --staged --quiet || git commit -m "Actualización automática de resultado.txt via GitHub Actions"
           git push
