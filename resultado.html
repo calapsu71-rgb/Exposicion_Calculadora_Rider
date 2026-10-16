@@ -50,7 +50,7 @@
 
   <div class="card">
     <h2>Resultado Acumulado</h2>
-    <p>Valor total guardado en <code>resultado.txt</code>:</p>
+    <p>Valor total guardado:</p>
     
     <div id="resultado" class="result-box">Cargando...</div>
 
@@ -58,15 +58,14 @@
   </div>
 
   <script>
-    // Carga el contenido de resultado.txt dinámicamente
-    fetch('resultado.txt?t=' + new Date().getTime())
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('resultado').innerText = data.trim();
-      })
-      .catch(error => {
-        document.getElementById('resultado').innerText = 'Error al cargar';
-      });
+    // Carga el resultado acumulado desde la memoria del navegador (compatible con GitHub Pages)
+    const valorGuardado = localStorage.getItem('resultadoAcumulado');
+
+    if (valorGuardado !== null && valorGuardado !== '') {
+      document.getElementById('resultado').innerText = valorGuardado;
+    } else {
+      document.getElementById('resultado').innerText = '0'; // Muestra 0 si aún no hay datos guardados
+    }
   </script>
 
 </body>

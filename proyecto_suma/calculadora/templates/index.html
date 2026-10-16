@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Django - Ingreso</title>
+  <title>Calculadora - Ingreso</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -63,7 +63,7 @@
       font-weight: bold;
       width: 100%;
       margin-top: 10px;
-      transition: background-color 0.2s;
+      transition: background-color: 0.2s;
     }
     .btn:hover {
       background-color: #5a67d8;
@@ -85,9 +85,8 @@
 <body>
 
   <div class="card">
-    <h2>Calculadora Django</h2>
-    <form method="POST">
-      {% csrf_token %}
+    <h2>Calculadora</h2>
+    <form id="calcForm">
       <div class="input-group">
         <label for="num1">Primer Número:</label>
         <input type="number" id="num1" name="num1" placeholder="Ej: 25" required>
@@ -101,8 +100,32 @@
       <button type="submit" class="btn">Calcular y Guardar Suma</button>
     </form>
 
-    <a href="{% url 'resultado' %}" class="btn btn-secondary">Ver Resultado Acumulado ➔</a>
+    <a href="resultado.html" class="btn btn-secondary">Ver Resultado Acumulado ➔</a>
   </div>
+
+  <script>
+    document.getElementById('calcForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Evita que la página recargue por defecto
+
+      // Captura los números ingresados
+      const num1 = parseFloat(document.getElementById('num1').value) || 0;
+      const num2 = parseFloat(document.getElementById('num2').value) || 0;
+      
+      const sumaActual = num1 + num2;
+
+      // Obtiene el acumulado previo del navegador (si no existe, comienza en 0)
+      const acumuladoAnterior = parseFloat(localStorage.getItem('resultadoAcumulado')) || 0;
+      
+      // Suma el nuevo resultado al acumulado total
+      const totalAcumulado = acumuladoAnterior + sumaActual;
+
+      // Guarda el valor actualizado en la memoria del navegador
+      localStorage.setItem('resultadoAcumulado', totalAcumulado);
+
+      // Redirige a la página de resultados para proyectarlo
+      window.location.href = 'resultado.html';
+    });
+  </script>
 
 </body>
 </html>
