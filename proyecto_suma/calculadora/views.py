@@ -5,7 +5,7 @@ from django.conf import settings
 # Ruta absoluta al archivo resultado.txt
 TXT_FILE_PATH = os.path.join(settings.BASE_DIR, 'resultado.txt')
 
-def index(request):
+def calcular_view(request):
     if request.method == 'POST':
         num1_raw = request.POST.get('num1', '0')
         num2_raw = request.POST.get('num2', '0')
@@ -13,34 +13,20 @@ def index(request):
         try:
             num1 = int(num1_raw)
             num2 = int(num2_raw)
-            suma_actual = num1 + num2
+            suma = num1 + num2
         except ValueError:
-            suma_actual = 0
+            suma = 0
 
-        # --- OPCIÓN A: Sobrescribir con el último cálculo (Lo que hace tu código actual) ---
-        total_a_guardar = suma_actual
-
-        # --- OPCIÓN B: Acumular con los cálculos anteriores (Descomenta esto si quieres que se sume al anterior) ---
-        # total_a_guardar = suma_actual
-        # if os.path.exists(TXT_FILE_PATH):
-        #     with open(TXT_FILE_PATH, 'r', encoding='utf-8') as f:
-        #         contenido = f.read().strip()
-        #         if contenido:
-        #             try:
-        #                 total_a_guardar = float(contenido) + suma_actual
-        #             except ValueError:
-        #                 pass
-
-        # Guardar el resultado en el archivo txt
+        # Guardar la suma real en el archivo txt
         with open(TXT_FILE_PATH, 'w', encoding='utf-8') as f:
-            f.write(str(total_a_guardar))
+            f.write(str(suma))
 
         return redirect('resultado')
 
     return render(request, 'index.html')
 
 
-def resultado(request):
+def resultado_view(request):
     total = "0"
     # Leer el archivo actualizado
     if os.path.exists(TXT_FILE_PATH):
