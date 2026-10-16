@@ -23,9 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$-aot9cuw5ak$xpa7=hwx-0jhi)o5^#$jzvpk6gnhba%hah^2f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# Permitir tu dominio de Render y conexiones locales
+ALLOWED_HOSTS = [
+    'exposicion-calculadora-rider.onrender.com',
+    '.onrender.com',
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # Application definition
