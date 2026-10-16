@@ -5,7 +5,7 @@ from django.conf import settings
 # Ruta absoluta al archivo resultado.txt
 TXT_FILE_PATH = os.path.join(settings.BASE_DIR, 'resultado.txt')
 
-def calcular_view(request):
+def index(request):
     if request.method == 'POST':
         num1_raw = request.POST.get('num1', '0')
         num2_raw = request.POST.get('num2', '0')
@@ -26,7 +26,7 @@ def calcular_view(request):
     return render(request, 'index.html')
 
 
-def resultado_view(request):
+def resultado(request):
     total = "0"
     # Leer el archivo actualizado
     if os.path.exists(TXT_FILE_PATH):
