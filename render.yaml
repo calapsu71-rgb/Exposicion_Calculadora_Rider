@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: exposicion-calculadora
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn proyecto_suma.proyecto_suma.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
