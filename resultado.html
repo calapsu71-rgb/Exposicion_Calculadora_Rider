@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultado Acumulado</title>
+  <title>Resultado de la Suma</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,7 +19,7 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      width: 360px;
+      width: 320px;
       text-align: center;
     }
     h2 { color: #2c3e50; }
@@ -49,24 +49,22 @@
 <body>
 
   <div class="card">
-    <h2>Resultado Acumulado</h2>
-    <p>Valor total guardado en <code>resultado.txt</code>:</p>
+    <h2>Resultado Obtenido</h2>
     
-    <div id="resultado" class="result-box">Cargando...</div>
+    <div id="resultado" class="result-box">0</div>
 
-    <a href="index.html" class="btn">⬅ Volver a Ingreso</a>
+    <a href="index.html" class="btn">⬅ Realizar otra suma</a>
   </div>
 
   <script>
-    // Carga el contenido de resultado.txt dinámicamente
-    fetch('resultado.txt?t=' + new Date().getTime())
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('resultado').innerText = data.trim();
-      })
-      .catch(error => {
-        document.getElementById('resultado').innerText = 'Error al cargar';
-      });
+    // Lee el resultado guardado y lo muestra
+    const valorCalculado = localStorage.getItem('resultadoSuma');
+
+    if (valorCalculado !== null) {
+      document.getElementById('resultado').innerText = valorCalculado;
+    } else {
+      document.getElementById('resultado').innerText = '0';
+    }
   </script>
 
 </body>
