@@ -1,8 +1,4 @@
 import os
-import psycopg2
-import MySQLdb
-from pymongo import MongoClient
-
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -74,98 +70,110 @@ def multimedia(request):
 
         fs_uploads = FileSystemStorage(location=static_uploads_path)
 
-        # Guardar imagen en static
+        # Guardar imagen en static/calculadora/uploads
         img_name = ""
         if imagen_file:
             if fs_uploads.exists(imagen_file.name):
                 fs_uploads.delete(imagen_file.name)
             img_name = fs_uploads.save(imagen_file.name, imagen_file)
 
-        # Guardar archivo adjunto en static
+        # Guardar documento en static/calculadora/uploads
         doc_name = ""
         if documento_file:
             if fs_uploads.exists(documento_file.name):
                 fs_uploads.delete(documento_file.name)
             doc_name = fs_uploads.save(documento_file.name, documento_file)
 
-        # --- LÓGICA DE INSERCIÓN SEGÚN LA BASE DE DATOS SELECCIONADA ---
+        # --- CONEXIÓN SEGURA Y DINÁMICA ---
         try:
-            if db_destino == 'postgres':
-                # Ejemplo de conexión a PostgreSQL
-                # (Asegúrate de ajustar credenciales o variables de entorno)
-                conn = psycopg2.connect(
-                    dbname=os.environ.get('PGDATABASE', 'tu_db_postgres'),
-                    user=os.environ.get('PGUSER', 'tu_usuario'),
-                    password=os.environ.get('PGPASSWORD', 'tu_password'),
-                    host=os.environ.get('PGHOST', 'localhost'),
-                    port=os.environ.get('PGPORT', '5432')
-                )
-                cursor = conn.cursor()
-                cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS registros (
-                        id SERIAL PRIMARY KEY,
-                        nombre VARCHAR(255),
-                        descripcion TEXT,
-                        imagen VARCHAR(255),
-                        documento VARCHAR(255)
+            if db_destino == 'mongodb':
+                try:
+                    from pymongo import MongoClient
+                    mongo_uri = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
+                    client = MongoClient(mongo_uri)
+                    db = client['calculadora_db']
+                    collection = db['registros']
+                    
+                    doc = {
+                        'nombre': nombre,
+                        'descripcion': descripcion,
+                        'imagen': img_name,
+                        'documento': doc_name
+                    }
+                    collection.insert_one(doc)
+                    client.close()
+                    mensaje_db = f"✅ ¡Registro guardado exitosamente en MongoDB Atlas!"
+                except Exception as e:
+                    mensaje_db = f"⚠️ Error al conectar con MongoDB: {str(e)}"
+
+            elif db_destino == 'postgres':
+                try:
+                    import psycopg2
+                    conn = psycopg2.connect(
+                        dbname=os.environ.get('PGDATABASE', 'defaultdb'),
+                        user=os.environ.get('PGUSER', 'root'),
+                        password=os.environ.get('PGPASSWORD', ''),
+                        host=os.environ.get('PGHOST', 'localhost'),
+                        port=os.environ.get('PGPORT', '5432')
                     )
-                """)
-                cursor.execute("""
-                    INSERT INTO registros (nombre, descripcion, imagen, documento)
-                    VALUES (%s, %s, %s, %s)
-                """, (nombre, descripcion, img_name, doc_name))
-                conn.commit()
-                cursor.close()
-                conn.close()
-                mensaje_db = f"✅ Registro guardado exitosamente en **PostgreSQL**."
+                    cursor = conn.cursor()
+                    cursor.execute("""
+                        CREATE TABLE IF NOT EXISTS registros (
+                            id SERIAL PRIMARY KEY,
+                            nombre VARCHAR(255),
+                            descripcion TEXT,
+                            imagen VARCHAR(255),
+                            documento VARCHAR(255)
+                        )
+                    """)
+                    cursor.execute("""
+                        INSERT INTO registros (nombre, descripcion, imagen, documento)
+                        VALUES (%s, %s, %s, %s)
+                    """, (nombre, descripcion, img_name, doc_name))
+                    conn.commit()
+                    cursor.close()
+                    conn.close()
+                    mensaje_db = f"✅ Registro guardado en PostgreSQL."
+                except ImportError:
+                    mensaje_db = f"ℹ️ Los archivos se guardaron localmente. Servidor PostgreSQL no configurado."
+                except Exception as e:
+                    mensaje_db = f"⚠️ Error con PostgreSQL: {str(e)}"
 
             elif db_destino == 'mysql':
-                # Ejemplo de conexión a MySQL
-                conn = MySQLdb.connect(
-                    db=os.environ.get('MYSQL_DATABASE', 'tu_db_mysql'),
-                    user=os.environ.get('MYSQL_USER', 'root'),
-                    passwd=os.environ.get('MYSQL_PASSWORD', 'tu_password'),
-                    host=os.environ.get('MYSQL_HOST', 'localhost'),
-                    port=int(os.environ.get('MYSQL_PORT', 3306))
-                )
-                cursor = conn.cursor()
-                cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS registros (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        nombre VARCHAR(255),
-                        descripcion TEXT,
-                        imagen VARCHAR(255),
-                        documento VARCHAR(255)
+                try:
+                    import MySQLdb
+                    conn = MySQLdb.connect(
+                        db=os.environ.get('MYSQL_DATABASE', 'defaultdb'),
+                        user=os.environ.get('MYSQL_USER', 'root'),
+                        passwd=os.environ.get('MYSQL_PASSWORD', ''),
+                        host=os.environ.get('MYSQL_HOST', 'localhost'),
+                        port=int(os.environ.get('MYSQL_PORT', 3306))
                     )
-                """)
-                cursor.execute("""
-                    INSERT INTO registros (nombre, descripcion, imagen, documento)
-                    VALUES (%s, %s, %s, %s)
-                """, (nombre, descripcion, img_name, doc_name))
-                conn.commit()
-                cursor.close()
-                conn.close()
-                mensaje_db = f"✅ Registro guardado exitosamente en **MySQL**."
-
-            elif db_destino == 'mongodb':
-                # Ejemplo de conexión a MongoDB
-                mongo_uri = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/')
-                client = MongoClient(mongo_uri)
-                db = client['calculadora_db']
-                collection = db['registros']
-                
-                doc = {
-                    'nombre': nombre,
-                    'descripcion': descripcion,
-                    'imagen': img_name,
-                    'documento': doc_name
-                }
-                collection.insert_one(doc)
-                client.close()
-                mensaje_db = f"✅ Registro guardado exitosamente en **MongoDB**."
+                    cursor = conn.cursor()
+                    cursor.execute("""
+                        CREATE TABLE IF NOT EXISTS registros (
+                            id INT AUTO_INCREMENT PRIMARY KEY,
+                            nombre VARCHAR(255),
+                            descripcion TEXT,
+                            imagen VARCHAR(255),
+                            documento VARCHAR(255)
+                        )
+                    """)
+                    cursor.execute("""
+                        INSERT INTO registros (nombre, descripcion, imagen, documento)
+                        VALUES (%s, %s, %s, %s)
+                    """, (nombre, descripcion, img_name, doc_name))
+                    conn.commit()
+                    cursor.close()
+                    conn.close()
+                    mensaje_db = f"✅ Registro guardado en MySQL."
+                except ImportError:
+                    mensaje_db = f"ℹ️ Los archivos se guardaron localmente. Servidor MySQL no configurado."
+                except Exception as e:
+                    mensaje_db = f"⚠️ Error con MySQL: {str(e)}"
 
         except Exception as e:
-            mensaje_db = f"⚠️ Datos procesados, pero ocurrió un error al conectar con {db_destino.upper()}: {str(e)}"
+            mensaje_db = f"Ocurrió un detalle al procesar: {str(e)}"
 
     # Listar PDFs de la subida individual
     archivos_pdf = []
