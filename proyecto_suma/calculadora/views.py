@@ -36,3 +36,7 @@ def resultado(request):
                 total = contenido
 
     return render(request, 'resultado.html', {'total': total})
+
+
+def multimedia(request):
+    return render(request, 'multimedia.html')
