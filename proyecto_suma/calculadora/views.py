@@ -37,29 +37,31 @@ def resultado(request):
 
 
 def multimedia(request):
-    # Carpeta donde se guardarán los PDF
-    media_path = os.path.join(settings.BASE_DIR, 'media', 'pdfs')
-    os.makedirs(media_path, exist_ok=True)
+    # Definimos la carpeta dentro de static
+    static_pdf_path = os.path.join(settings.BASE_DIR, 'calculadora', 'static', 'calculadora', 'pdfs')
+    os.makedirs(static_pdf_path, exist_ok=True)
 
     mensaje = None
 
-    # Procesar subida de archivo PDF
+    # Procesar la subida del PDF
     if request.method == 'POST' and request.FILES.get('pdf_file'):
         pdf_file = request.FILES['pdf_file']
         if pdf_file.name.endswith('.pdf'):
-            fs = FileSystemStorage(location=media_path)
+            fs = FileSystemStorage(location=static_pdf_path)
+            # Sobrescribe el archivo si ya existe para evitar duplicados con sufijos
+            if fs.exists(pdf_file.name):
+                fs.delete(pdf_file.name)
             fs.save(pdf_file.name, pdf_file)
-            mensaje = f"Archivo '{pdf_file.name}' subido con éxito."
+            mensaje = f"Archivo '{pdf_file.name}' subido con éxito a la carpeta static."
         else:
             mensaje = "Error: Por favor selecciona únicamente archivos con extensión .pdf."
 
-    # Listar todos los archivos PDF guardados para descarga
+    # Listar todos los archivos PDF presentes en static/calculadora/pdfs
     archivos_pdf = []
-    if os.path.exists(media_path):
-        archivos_pdf = [f for f in os.listdir(media_path) if f.endswith('.pdf')]
+    if os.path.exists(static_pdf_path):
+        archivos_pdf = [f for f in os.listdir(static_pdf_path) if f.endswith('.pdf')]
 
     return render(request, 'multimedia.html', {
         'mensaje': mensaje,
         'archivos_pdf': archivos_pdf,
-        'MEDIA_URL': '/media/pdfs/'
     })
