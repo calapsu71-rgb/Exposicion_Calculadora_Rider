@@ -124,3 +124,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # <-- Directorio necesario para colectar estáticos en Render
+
+import os
+
+# Configuración para archivos subidos por los usuarios (Media)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
