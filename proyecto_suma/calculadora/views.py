@@ -2,6 +2,7 @@ import os
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.db import connections
 
 TXT_FILE_PATH = os.path.join(settings.BASE_DIR, 'resultado.txt')
 
@@ -185,3 +186,18 @@ def multimedia(request):
         'mensaje_db': mensaje_db,
         'archivos_pdf': archivos_pdf,
     })
+
+def guardar_o_consultar_mysql():
+    with connections['mysql_db'].cursor() as cursor:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS registros_mysql (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nombre VARCHAR(255),
+                descripcion TEXT,
+                imagen VARCHAR(255),
+                documento VARCHAR(255)
+            )
+        """)
+        cursor.execute("SELECT id, nombre, descripcion, imagen, documento FROM registros_mysql ORDER BY id DESC LIMIT 5;")
+        registros = cursor.fetchall()
+    return registros

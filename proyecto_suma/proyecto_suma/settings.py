@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import pymysql
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,9 +84,23 @@ WSGI_APPLICATION = 'proyecto_suma.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
+    # 1. Base de Datos Principal: PostgreSQL (Render)
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('PGDATABASE', 'calculadora_db_v9jh'),
+        'USER': os.environ.get('PGUSER', 'camilo'),
+        'PASSWORD': os.environ.get('PGPASSWORD', 'yAPgTZN8PQfkbzHAcCukAeWKEB9lFBAU'),
+        'HOST': os.environ.get('PGHOST', 'dpg-dbb47nifngtc739rvna0-a.oregon-postgres.render.com'),
+        'PORT': os.environ.get('PGPORT', '5432'),
+    },
+    # 2. Base de Datos Secundaria: MySQL (FreeSQLDatabase)
+    'mysql_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQL_DB', 'sql10839122'),
+        'USER': os.environ.get('MYSQL_USER', 'sql10839122'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', '1xPkzPTAPF'),
+        'HOST': os.environ.get('MYSQL_HOST', 'sql10.freesqldatabase.com'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
     }
 }
 
@@ -125,7 +142,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # <-- Directorio necesario para colectar estáticos en Render
 
-import os
 
 # Configuración para archivos subidos por los usuarios (Media)
 MEDIA_URL = '/media/'
