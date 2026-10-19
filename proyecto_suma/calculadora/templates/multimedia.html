@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sección Multimedia y 3D</title>
+  <!-- Librería oficial para modelos 3D -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    h1, h2 { color: #2c3e50; text-align: center; }
+    .section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eaeaea; text-align: center; }
+    img, video { max-width: 100%; border-radius: 8px; }
+    audio { width: 100%; margin-top: 10px; }
+    iframe { width: 100%; height: 300px; border: 0; border-radius: 8px; }
+    model-viewer { width: 100%; height: 400px; background-color: #f0f0f0; border-radius: 8px; }
+    .btn-back { display: inline-block; background: #6e7781; color: white; padding: 10px 15px; border-radius: 6px; text-decoration: none; margin-bottom: 20px; }
+    .btn-back:hover { background: #57606a; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{% url 'index' %}" class="btn-back">⬅ Volver al Inicio</a>
+    <h1>Galería Multimedia, Mapa y Modelo 3D</h1>
+
+    <!-- 1. IMAGEN -->
+    <div class="section">
+      <h2>1. Imagen</h2>
+      <img src="{% static 'calculadora/imagen.jpg' %}" alt="Imagen local">
+    </div>
+
+    <!-- 2. VIDEO -->
+    <div class="section">
+      <h2>2. Video</h2>
+      <video controls>
+        <source src="{% static 'calculadora/video.mp4' %}" type="video/mp4">
+        Tu navegador no soporta reproducción de video.
+      </video>
+    </div>
+
+    <!-- 3. AUDIO -->
+    <div class="section">
+      <h2>3. Audio</h2>
+      <audio controls>
+        <source src="{% static 'calculadora/audio.mp3' %}" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+      </audio>
+    </div>
+
+    <!-- 4. MAPA DE GEOLOCALIZACIÓN -->
+    <div class="section">
+      <h2>4. Mapa de Geolocalización (Popayán)</h2>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.697415494297!2d-76.6094559252327!3d2.441834997537384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3003186d52da3f%3A0x6fb878841cb6f7b1!2sPopay%C3%A1n%2C%20Cauca!5e0!3m2!1ses!2sco!4v1710000000000!5m2!1ses!2sco" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+    <!-- 5. MODELO 3D -->
+    <div class="section">
+      <h2>5. Modelo 3D Interactivo</h2>
+      <model-viewer src="{% static 'calculadora/modelo.glb' %}" alt="Modelo 3D local" auto-rotate camera-controls></model-viewer>
+    </div>
+  </div>
+</body>
+</html>

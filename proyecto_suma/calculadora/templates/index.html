@@ -45,6 +45,19 @@
       margin-top: 10px;
     }
     .btn:hover { background-color: #2c974b; }
+    .btn-multimedia {
+      display: block;
+      background-color: #0366d6;
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: 15px;
+      box-sizing: border-box;
+    }
+    .btn-multimedia:hover { background-color: #024ea4; }
   </style>
 </head>
 <body>
@@ -66,6 +79,8 @@
       <button type="submit" class="btn">Calcular y Guardar Suma</button>
     </form>
 
+    <!-- Botón que redirige a la nueva página multimedia -->
+    <a href="{% url 'multimedia' %}" class="btn-multimedia">✨ Ver Sección Multimedia y 3D</a>
   </div>
 
 </body>
