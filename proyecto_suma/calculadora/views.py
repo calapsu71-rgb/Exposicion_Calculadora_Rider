@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import connections
+import pymysql
+
 
 TXT_FILE_PATH = os.path.join(settings.BASE_DIR, 'resultado.txt')
 
@@ -201,3 +203,61 @@ def guardar_o_consultar_mysql():
         cursor.execute("SELECT id, nombre, descripcion, imagen, documento FROM registros_mysql ORDER BY id DESC LIMIT 5;")
         registros = cursor.fetchall()
     return registros
+
+def multimedia(request):
+    mensaje_db = None
+    registros_mysql = []
+
+    if request.method == 'POST' and 'guardar_db' in request.POST:
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        db_destino = request.POST.get('db_destino')
+
+        try:
+            if db_destino == 'mysql':
+                connection = pymysql.connect(
+                    host=os.environ.get('MYSQL_HOST'),
+                    user=os.environ.get('MYSQL_USER'),
+                    password=os.environ.get('MYSQL_PASSWORD'),
+                    database=os.environ.get('MYSQL_DB'),
+                    port=int(os.environ.get('MYSQL_PORT', 3306))
+                )
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        CREATE TABLE IF NOT EXISTS registros_mysql (
+                            id INT AUTO_INCREMENT PRIMARY KEY,
+                            nombre VARCHAR(255),
+                            descripcion TEXT
+                        )
+                    """)
+                    cursor.execute("""
+                        INSERT INTO registros_mysql (nombre, descripcion)
+                        VALUES (%s, %s)
+                    """, (nombre, descripcion))
+                    connection.commit()
+                connection.close()
+                mensaje_db = "✅ ¡Guardado exitosamente en MySQL!"
+        except Exception as e:
+            mensaje_db = f"⚠️ Error en MySQL: {str(e)}"
+
+    # Consultar registros de MySQL
+    try:
+        connection = pymysql.connect(
+            host=os.environ.get('MYSQL_HOST'),
+            user=os.environ.get('MYSQL_USER'),
+            password=os.environ.get('MYSQL_PASSWORD'),
+            database=os.environ.get('MYSQL_DB'),
+            port=int(os.environ.get('MYSQL_PORT', 3306))
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("CREATE TABLE IF NOT EXISTS registros_mysql (id INT AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(255), descripcion TEXT);")
+            cursor.execute("SELECT id, nombre, descripcion FROM registros_mysql ORDER BY id DESC LIMIT 5;")
+            registros_mysql = cursor.fetchall()
+        connection.close()
+    except Exception:
+        pass
+
+    return render(request, 'multimedia.html', {
+        'mensaje_db': mensaje_db,
+        'registros_mysql': registros_mysql,
+    })

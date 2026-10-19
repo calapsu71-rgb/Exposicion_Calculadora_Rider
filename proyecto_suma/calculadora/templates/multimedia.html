@@ -85,6 +85,28 @@
       </form>
     </div>
 
+    <div style="margin-top: 30px;">
+    <h3>🐬 Registros guardados en MySQL:</h3>
+    <table border="1" cellpadding="10" style="width:100%; border-collapse: collapse; text-align: left;">
+        <tr style="background-color: #f2f2f2;">
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+        </tr>
+        {% for reg in registros_mysql %}
+        <tr>
+            <td>{{ reg.0 }}</td>
+            <td>{{ reg.1 }}</td>
+            <td>{{ reg.2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No hay registros en MySQL aún.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
     <!-- SUBIR Y DESCARGAR ARCHIVOS PDF (STATIC) -->
     <div class="section">
       <h2>📁 Cargar y Descargar Archivos PDF</h2>
