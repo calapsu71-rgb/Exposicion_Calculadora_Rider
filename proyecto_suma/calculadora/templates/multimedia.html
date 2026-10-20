@@ -8,7 +8,7 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; padding: 20px; color: #333; }
-    .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     h1, h2 { color: #2c3e50; text-align: center; }
     .section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eaeaea; text-align: center; }
     img, video { max-width: 100%; border-radius: 8px; }
@@ -28,7 +28,10 @@
     .pdf-item { background: #edf2f7; padding: 10px 15px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .btn-download { background-color: #0366d6; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; }
     .btn-download:hover { background-color: #024ea4; }
-    .alert { padding: 10px; background-color: #d4edda; color: #155724; border-radius: 6px; margin-bottom: 15px; }
+    .alert { padding: 12px; background-color: #d4edda; color: #155724; border-radius: 6px; margin-bottom: 15px; font-weight: bold; text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: left; }
+    th, td { border: 1px solid #ccc; padding: 10px; font-size: 14px; }
+    th { background-color: #f2f2f2; }
   </style>
 </head>
 <body>
@@ -75,9 +78,9 @@
         <div class="form-group">
           <label for="db_destino">Selecciona el Motor de Base de Datos:</label>
           <select id="db_destino" name="db_destino" required>
-            <option value="postgres">🐘 PostgreSQL</option>
-            <option value="mysql">🐬 MySQL</option>
-            <option value="mongodb">🍃 MongoDB</option>
+            <option value="postgres">🐘 PostgreSQL (Render)</option>
+            <option value="mysql">🐬 MySQL (FreeSQLDatabase)</option>
+            <option value="mongodb">🍃 MongoDB Atlas</option>
           </select>
         </div>
 
@@ -85,27 +88,92 @@
       </form>
     </div>
 
-    <div style="margin-top: 30px;">
-    <h3>🐬 Registros guardados en MySQL:</h3>
-    <table border="1" cellpadding="10" style="width:100%; border-collapse: collapse; text-align: left;">
-        <tr style="background-color: #f2f2f2;">
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
+    <!-- SECCIÓN DE VISUALIZACIÓN DE REGISTROS (3 BASES DE DATOS) -->
+    <div class="section" style="text-align: left;">
+      <h2>📊 Registros en Vivo por Base de Datos</h2>
+
+      <!-- TABLA POSTGRESQL -->
+      <h3 style="color: #2c3e50; margin-top: 20px;">🐘 PostgreSQL (Render)</h3>
+      <table>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Descripción</th><th>Imagen</th><th>Documento</th>
+        </tr>
+        {% for reg in registros_postgres %}
+        <tr>
+          <td>{{ reg.0 }}</td><td>{{ reg.1 }}</td><td>{{ reg.2 }}</td><td>{{ reg.3 }}</td><td>{{ reg.4 }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align: center;">No hay registros en PostgreSQL.</td></tr>
+        {% endfor %}
+      </table>
+
+      <!-- TABLA MYSQL -->
+      <h3 style="color: #2c3e50; margin-top: 25px;">🐬 MySQL (FreeSQLDatabase)</h3>
+      <table>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Descripción</th><th>Imagen</th><th>Documento</th>
         </tr>
         {% for reg in registros_mysql %}
         <tr>
-            <td>{{ reg.0 }}</td>
-            <td>{{ reg.1 }}</td>
-            <td>{{ reg.2 }}</td>
+          <td>{{ reg.0 }}</td><td>{{ reg.1 }}</td><td>{{ reg.2 }}</td><td>{{ reg.3 }}</td><td>{{ reg.4 }}</td>
         </tr>
         {% empty %}
-        <tr>
-            <td colspan="3">No hay registros en MySQL aún.</td>
-        </tr>
+        <tr><td colspan="5" style="text-align: center;">No hay registros en MySQL.</td></tr>
         {% endfor %}
-    </table>
-</div>
+      </table>
+
+      <!-- TABLA MONGODB -->
+      <h3 style="color: #2c3e50; margin-top: 25px;">🍃 MongoDB Atlas</h3>
+      <table>
+        <tr>
+          <th>Nombre</th><th>Descripción</th><th>Imagen</th><th>Documento</th>
+        </tr>
+        {% for reg in registros_mongo %}
+        <tr>
+          <td>{{ reg.nombre }}</td><td>{{ reg.descripcion }}</td><td>{{ reg.imagen }}</td><td>{{ reg.documento }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align: center;">No hay registros en MongoDB.</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- DEMOSTRACIÓN DE RELACIONES (1:1, 1:N, N:M) -->
+    <div class="section" style="text-align: left; background: #fdfdfd; border: 1px solid #dcdcdc; padding: 20px; border-radius: 8px;">
+      <h2 style="text-align: center;">🔗 Demostración de Relaciones (1:1, 1:N, N:M)</h2>
+      
+      <form method="POST" class="upload-form">
+        {% csrf_token %}
+        <input type="hidden" name="probar_relacion" value="1">
+
+        <div class="form-group">
+          <label for="db_relaciones">Selecciona la Base de Datos para la Relación:</label>
+          <select name="db_relaciones" id="db_relaciones" required>
+            <option value="postgres">🐘 PostgreSQL (Render)</option>
+            <option value="mysql">🐬 MySQL (FreeSQLDatabase)</option>
+            <option value="mongodb">🍃 MongoDB Atlas (NoSQL)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tipo_relacion">Selecciona el Tipo de Relación:</label>
+          <select name="tipo_relacion" id="tipo_relacion" required>
+            <option value="1:1">1 a 1 (Estudiante ↔ Expediente)</option>
+            <option value="1:N">1 a Muchos (Profesor ↔ Cursos)</option>
+            <option value="N:M">Muchos a Muchos (Estudiantes ↔ Cursos)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit" style="background-color: #0366d6;">🚀 Ejecutar Prueba de Relación</button>
+      </form>
+
+      {% if resultado_relacion %}
+      <div style="margin-top: 15px; padding: 15px; background: #e9ecef; border-left: 5px solid #2da44e; border-radius: 4px;">
+        <h4 style="margin: 0 0 5px 0; color: #2c3e50;">📋 Resultado de la Relación:</h4>
+        <p style="margin: 0; font-family: monospace; font-size: 14px;">{{ resultado_relacion }}</p>
+      </div>
+      {% endif %}
+    </div>
 
     <!-- SUBIR Y DESCARGAR ARCHIVOS PDF (STATIC) -->
     <div class="section">
@@ -135,13 +203,13 @@
 
     <!-- IMAGEN -->
     <div class="section">
-      <h2>1. Imagen</h2>
+      <h2>Imagen</h2>
       <img src="{% static 'calculadora/imagen.jpg' %}" alt="Imagen local">
     </div>
 
     <!-- VIDEO -->
     <div class="section">
-      <h2>2. Video</h2>
+      <h2>Video</h2>
       <video controls>
         <source src="{% static 'calculadora/video.mp4' %}" type="video/mp4">
         Tu navegador no soporta reproducción de video.
@@ -150,7 +218,7 @@
 
     <!-- AUDIO -->
     <div class="section">
-      <h2>3. Audio</h2>
+      <h2>Audio</h2>
       <audio controls>
         <source src="{% static 'calculadora/audio.mp3' %}" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
@@ -159,13 +227,13 @@
 
     <!-- MAPA DE GEOLOCALIZACIÓN -->
     <div class="section">
-      <h2>4. Mapa de Geolocalización (Popayán)</h2>
+      <h2>Mapa de Geolocalización (Popayán)</h2>
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.697415494297!2d-76.6094559252327!3d2.441834997537384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3003186d52da3f%3A0x6fb878841cb6f7b1!2sPopay%C3%A1n%2C%20Cauca!5e0!3m2!1ses!2sco!4v1710000000000!5m2!1ses!2sco" allowfullscreen="" loading="lazy"></iframe>
     </div>
 
     <!-- MODELO 3D -->
     <div class="section">
-      <h2>5. Modelo 3D Interactivo</h2>
+      <h2>Modelo 3D Interactivo</h2>
       <model-viewer src="{% static 'calculadora/modelo.glb' %}" alt="Modelo 3D local" auto-rotate camera-controls></model-viewer>
     </div>
   </div>
