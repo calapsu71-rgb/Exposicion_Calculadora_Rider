@@ -138,7 +138,7 @@
       </table>
     </div>
 
-    <!-- DEMOSTRACIÓN DE RELACIONES (1:1, 1:N, N:M) -->
+    <!-- DEMOSTRACIÓN DE RELACIONES (1:1, 1:N, N:M) EN VIVO -->
     <div class="section" style="text-align: left; background: #fdfdfd; border: 1px solid #dcdcdc; padding: 20px; border-radius: 8px;">
       <h2 style="text-align: center;">🔗 Demostración de Relaciones (1:1, 1:N, N:M)</h2>
       
@@ -169,10 +169,108 @@
 
       {% if resultado_relacion %}
       <div style="margin-top: 15px; padding: 15px; background: #e9ecef; border-left: 5px solid #2da44e; border-radius: 4px;">
-        <h4 style="margin: 0 0 5px 0; color: #2c3e50;">📋 Resultado de la Relación:</h4>
+        <h4 style="margin: 0 0 5px 0; color: #2c3e50;">📋 Resultado de la Operación:</h4>
         <p style="margin: 0; font-family: monospace; font-size: 14px;">{{ resultado_relacion }}</p>
       </div>
       {% endif %}
+
+      <!-- LISTAS EN VIVO DE LAS RELACIONES CREADAS -->
+      <div style="margin-top: 25px; border-top: 2px dashed #bbb; padding-top: 15px;">
+        <h3 style="text-align: center; color: #2c3e50;">📡 Registros de Relaciones en Tiempo Real</h3>
+
+        <!-- POSTGRESQL RELACIONES -->
+        <h4 style="color: #2c3e50;">🐘 Relaciones en PostgreSQL:</h4>
+        <div style="font-size: 13px; background: #f8f9fa; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+          <strong>1:1 (Estudiantes y Expedientes):</strong>
+          <ul>
+            {% for r in rel_pg_1a1 %}
+              <li>Estudiante: <b>{{ r.0 }}</b> (ID: {{ r.1 }}) ↔ Expediente Promedio: <b>{{ r.2 }}</b></li>
+            {% empty %}
+              <li><em>Sin registros 1:1 aún.</em></li>
+            {% endfor %}
+          </ul>
+
+          <strong>1:N (Profesores y Cursos):</strong>
+          <ul>
+            {% for r in rel_pg_1aN %}
+              <li>Profesor: <b>{{ r.0 }}</b> ➔ Curso: <b>{{ r.1 }}</b></li>
+            {% empty %}
+              <li><em>Sin registros 1:N aún.</em></li>
+            {% endfor %}
+          </ul>
+
+          <strong>N:M (Alumnos y Materias via Tabla Pivote):</strong>
+          <ul>
+            {% for r in rel_pg_NmM %}
+              <li>Alumno: <b>{{ r.0 }}</b> ↔ Materia: <b>{{ r.1 }}</b></li>
+            {% empty %}
+              <li><em>Sin registros N:M aún.</em></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- MYSQL RELACIONES -->
+        <h4 style="color: #2c3e50;">🐬 Relaciones en MySQL:</h4>
+        <div style="font-size: 13px; background: #f8f9fa; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+          <strong>1:1 (Usuarios y Perfiles):</strong>
+          <ul>
+            {% for r in rel_ms_1a1 %}
+              <li>Usuario: <b>{{ r.0 }}</b> ↔ Bio: <b>{{ r.1 }}</b></li>
+            {% empty %}
+              <li><em>Sin registros 1:1 aún.</em></li>
+            {% endfor %}
+          </ul>
+
+          <strong>1:N (Categorías y Productos):</strong>
+          <ul>
+            {% for r in rel_ms_1aN %}
+              <li>Categoría: <b>{{ r.0 }}</b> ➔ Producto: <b>{{ r.1 }}</b></li>
+            {% empty %}
+              <li><em>Sin registros 1:N aún.</em></li>
+            {% endfor %}
+          </ul>
+
+          <strong>N:M (Autores y Libros via Tabla Intermedia):</strong>
+          <ul>
+            {% for r in rel_ms_NmM %}
+              <li>Autor: <b>{{ r.0 }}</b> ↔ Libro: <b>{{ r.1 }}</b></li>
+            {% empty %}
+              <li><em>Sin registros N:M aún.</em></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- MONGODB ATLAS RELACIONES -->
+        <h4 style="color: #2c3e50;">🍃 Relaciones en MongoDB Atlas:</h4>
+        <div style="font-size: 13px; background: #f8f9fa; padding: 10px; border-radius: 6px;">
+          <strong>1:1 (Documentos Embebidos):</strong>
+          <ul>
+            {% for r in rel_mg_1a1 %}
+              <li>Estudiante: <b>{{ r.nombre }}</b> ↔ Promedio Embebido: <b>{{ r.expediente.promedio }}</b></li>
+            {% empty %}
+              <li><em>Sin registros 1:1 aún.</em></li>
+            {% endfor %}
+          </ul>
+
+          <strong>1:N (Subdocumentos Array):</strong>
+          <ul>
+            {% for r in rel_mg_1aN %}
+              <li>Profesor: <b>{{ r.profesor }}</b> ➔ Cursos Creados: <b>{{ r.cursos|length }}</b></li>
+            {% empty %}
+              <li><em>Sin registros 1:N aún.</em></li>
+            {% endfor %}
+          </ul>
+
+          <strong>N:M (Arreglos de Referencia):</strong>
+          <ul>
+            {% for r in rel_mg_NmM %}
+              <li>Estudiante: <b>{{ r.estudiante }}</b> ↔ Cursos IDs Referenciados: <b>{{ r.cursos_ids }}</b></li>
+            {% empty %}
+              <li><em>Sin registros N:M aún.</em></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- SUBIR Y DESCARGAR ARCHIVOS PDF (STATIC) -->
